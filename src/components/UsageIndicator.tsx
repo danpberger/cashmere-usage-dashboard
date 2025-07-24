@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
-  CreditCard, 
-  Search, 
+  Zap, 
+  BookOpen, 
   EyeOff, 
   Maximize2, 
   DollarSign,
@@ -28,16 +28,16 @@ export const UsageIndicator: React.FC = () => {
   };
 
   const getStatusColor = () => {
-    const creditPercentage = (metrics.remainingCredits / metrics.totalCredits) * 100;
-    if (creditPercentage > 50) return 'text-green-600';
-    if (creditPercentage > 20) return 'text-yellow-600';
+    const tokenPercentage = (metrics.remainingTokens / metrics.totalTokens) * 100;
+    if (tokenPercentage > 50) return 'text-green-600';
+    if (tokenPercentage > 20) return 'text-yellow-600';
     return 'text-red-600';
   };
 
   const getStatusBgColor = () => {
-    const creditPercentage = (metrics.remainingCredits / metrics.totalCredits) * 100;
-    if (creditPercentage > 50) return 'bg-green-50 border-green-200';
-    if (creditPercentage > 20) return 'bg-yellow-50 border-yellow-200';
+    const tokenPercentage = (metrics.remainingTokens / metrics.totalTokens) * 100;
+    if (tokenPercentage > 50) return 'bg-green-50 border-green-200';
+    if (tokenPercentage > 20) return 'bg-yellow-50 border-yellow-200';
     return 'bg-red-50 border-red-200';
   };
 
@@ -48,9 +48,9 @@ export const UsageIndicator: React.FC = () => {
              onClick={toggleMinimized}>
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <CreditCard className={`w-6 h-6 ${getStatusColor()} mx-auto mb-1`} />
+              <Zap className={`w-6 h-6 ${getStatusColor()} mx-auto mb-1`} />
               <div className={`text-xs font-semibold ${getStatusColor()}`}>
-                {metrics.remainingCredits}
+                {metrics.remainingTokens}
               </div>
             </div>
           </div>
@@ -87,43 +87,40 @@ export const UsageIndicator: React.FC = () => {
 
           {/* Quick Stats */}
           <div className="space-y-3">
-            {/* Credits */}
+            {/* Tokens */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-blue-600" />
-                <span className="text-sm text-gray-600">Credits</span>
+                <Zap className="w-4 h-4 text-blue-600" />
+                <span className="text-sm text-gray-600">Tokens</span>
               </div>
               <div className="text-right">
                 <div className={`font-semibold text-sm ${getStatusColor()}`}>
-                  {metrics.remainingCredits}/{metrics.totalCredits}
+                  {metrics.remainingTokens}/{metrics.totalTokens}
                 </div>
                 <div className="w-16 bg-gray-200 rounded-full h-1.5 mt-1">
                   <div 
                     className={`h-1.5 rounded-full transition-all ${
-                      metrics.remainingCredits > metrics.totalCredits * 0.5 ? 'bg-green-500' :
-                      metrics.remainingCredits > metrics.totalCredits * 0.2 ? 'bg-yellow-500' : 'bg-red-500'
+                      metrics.remainingTokens > metrics.totalTokens * 0.5 ? 'bg-green-500' :
+                      metrics.remainingTokens > metrics.totalTokens * 0.2 ? 'bg-yellow-500' : 'bg-red-500'
                     }`}
-                    style={{ width: `${(metrics.remainingCredits / metrics.totalCredits) * 100}%` }}
+                    style={{ width: `${(metrics.remainingTokens / metrics.totalTokens) * 100}%` }}
                   />
                 </div>
               </div>
             </div>
 
-            {/* Searches */}
+            {/* Articles */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Search className="w-4 h-4 text-purple-600" />
-                <span className="text-sm text-gray-600">Searches</span>
+                <BookOpen className="w-4 h-4 text-purple-600" />
+                <span className="text-sm text-gray-600">Articles</span>
               </div>
               <div className="text-right">
                 <div className="font-semibold text-sm text-gray-800">
-                  {metrics.remainingSearches}/{metrics.totalSearches}
+                  {metrics.articlesAccessed}
                 </div>
-                <div className="w-16 bg-gray-200 rounded-full h-1.5 mt-1">
-                  <div 
-                    className="bg-purple-500 h-1.5 rounded-full transition-all"
-                    style={{ width: `${(metrics.remainingSearches / metrics.totalSearches) * 100}%` }}
-                  />
+                <div className="text-xs text-gray-500">
+                  accessed
                 </div>
               </div>
             </div>
@@ -135,11 +132,11 @@ export const UsageIndicator: React.FC = () => {
                 <span className="text-sm text-gray-600">Balance</span>
               </div>
               <div className="font-semibold text-sm text-gray-800">
-                ${metrics.currentBalance.toFixed(2)}
+                ${metrics.currentBalanceUSD.toFixed(2)}
               </div>
             </div>
 
-            {/* Monthly Spend */}
+            {/* Monthly Usage */}
             <div className="flex items-center justify-between pt-2 border-t border-gray-100">
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-orange-600" />
@@ -147,10 +144,10 @@ export const UsageIndicator: React.FC = () => {
               </div>
               <div className="text-right">
                 <div className="font-semibold text-sm text-gray-800">
-                  ${metrics.monthlySpend.toFixed(2)}
+                  {metrics.monthlyTokensUsed} tokens
                 </div>
                 <div className="text-xs text-gray-500">
-                  of ${metrics.monthlyLimit.toFixed(2)}
+                  of {metrics.monthlyTokenLimit} limit
                 </div>
               </div>
             </div>

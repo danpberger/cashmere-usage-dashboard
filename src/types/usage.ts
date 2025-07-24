@@ -1,23 +1,25 @@
 export interface UsageMetrics {
-  remainingCredits: number;
-  totalCredits: number;
-  remainingSearches: number;
-  totalSearches: number;
-  currentBalance: number;
-  monthlySpend: number;
-  monthlyLimit: number;
+  remainingTokens: number;
+  totalTokens: number;
+  monthlyTokensUsed: number;
+  monthlyTokenLimit: number;
+  currentBalanceUSD: number;
+  tokenToUSDRate: number; // How much 1 token costs in USD
+  articlesAccessed: number;
+  uniquePublishers: number;
 }
 
 export interface Transaction {
   id: string;
   timestamp: Date;
-  type: 'search' | 'access' | 'credit_purchase' | 'refund';
-  amount: number;
+  type: 'response_generation' | 'content_access' | 'token_purchase' | 'refund';
+  tokensUsed: number;
+  usdAmount: number;
   description: string;
   publisher?: string;
   contentTitle?: string;
   contentUrl?: string;
-  credits?: number;
+  responseId?: string;
 }
 
 export interface ContentSource {
@@ -26,14 +28,36 @@ export interface ContentSource {
   publisher: string;
   url: string;
   accessedAt: Date;
-  cost: number;
+  tokensUsed: number;
   contentType: 'article' | 'chapter' | 'book' | 'journal';
+  excerpt?: string;
+  doi?: string;
+  publicationDate?: Date;
+}
+
+export interface ResponseVariant {
+  id: string;
+  content: string;
+  sources: ContentSource[];
+  tokensUsed: number;
+  confidence: number;
+  uniqueReferences: number;
+}
+
+export interface ConversationMessage {
+  id: string;
+  type: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+  responseVariants?: ResponseVariant[];
+  selectedVariantId?: string;
 }
 
 export interface UsageState {
   metrics: UsageMetrics;
   transactions: Transaction[];
   contentSources: ContentSource[];
+  conversationHistory: ConversationMessage[];
   isLoading: boolean;
   lastUpdated: Date;
 }
